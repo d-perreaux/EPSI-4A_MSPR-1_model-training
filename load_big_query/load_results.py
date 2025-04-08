@@ -2,7 +2,7 @@ from db_query.query import DatabaseQuery
 from google.cloud import bigquery
 
 
-client = bigquery.Client.from_service_account_json("../mspr-454808-baf9c7d409e4.json")
+client = bigquery.Client.from_service_account_json("../mspr-454808-d750cb51f2b1.json")
 
 query_big_query = """
     SELECT 
