@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, roc_auc_score, roc_curve
+from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, roc_auc_score, roc_curve, f1_score
 
 from db_query.query import DatabaseQuery
 
@@ -23,6 +23,7 @@ query = """
     SELECT encodage_avec_centre_gagnant as prediction, encodage_avec_centre_gagnant_precedent as precedent FROM legislative_per_cir
     WHERE encodage_avec_centre_gagnant_precedent IS NOT NULL
     AND encodage_avec_centre_gagnant IS NOT NULL
+    AND annee IN (2017, 2022, 2024)
 """
 query_job = DatabaseQuery.execute(query, fetch_all=True)
 
@@ -45,3 +46,15 @@ y_pred = clf.predict(X_test)
 print(accuracy_score(y_test, y_pred))
 
 print(confusion_matrix(y_test, y_pred))
+
+print("Precision (pondérée) :", precision_score(y_test, y_pred, average='weighted', zero_division=1))
+print("Recall (pondéré) :", recall_score(y_test, y_pred, average='weighted', zero_division=1))
+print("F1-score (pondéré) :", f1_score(y_test, y_pred, average='weighted', zero_division=1))
+
+y_proba = clf.predict_proba(X_test)
+
+print("ROC AUC (ovr) :", roc_auc_score(y_test, y_proba, multi_class='ovr'))
+
+print("Total data:", len(df))
+print("Train size:", len(X_train))
+print("Test size:", len(X_test))

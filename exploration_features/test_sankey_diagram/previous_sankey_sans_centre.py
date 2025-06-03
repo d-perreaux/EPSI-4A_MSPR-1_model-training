@@ -86,6 +86,7 @@ source = []
 target = []
 value = []
 
+# Lecture : 2024 à gauche et on remonte le temps
 for winner, dict_previous in source_2024.items():
     for previous, count in dict_previous.items():
         source.append(winner - 1)
@@ -103,6 +104,28 @@ for winner, dict_previous in source_2017.items():
         source.append(winner + 7)
         target.append(previous + 11)
         value.append(count)
+
+# Lecture : 2012 à gauche et on va vers 2024
+# # 2012 → 2017
+# for winner, dict_previous in source_2017.items():
+#     for previous, count in dict_previous.items():
+#         source.append(previous + 0)      # 2012 index: 1–7
+#         target.append(winner + 5)        # 2017 index: 5–8
+#         value.append(count)
+#
+# # 2017 → 2022
+# for winner, dict_previous in source_2022.items():
+#     for previous, count in dict_previous.items():
+#         source.append(previous + 5)      # 2017 index: 5–8
+#         target.append(winner + 9)        # 2022 index: 9–12
+#         value.append(count)
+#
+# # 2022 → 2024
+# for winner, dict_previous in source_2024.items():
+#     for previous, count in dict_previous.items():
+#         source.append(previous + 9)      # 2022 index: 9–12
+#         target.append(winner + 13)       # 2024 index: 13–16
+#         value.append(count)
 
 print(source)
 print(target)
@@ -138,5 +161,28 @@ fig = go.Figure(data=[go.Sankey(
     )
 )])
 
-fig.update_layout(title_text="Évolution des nuances politiques (2024 → 2022 → 2017 -> 2012)", font_size=12)
-fig.write_html("sankey_diagram_previous_shade.html")
+fig.update_layout(title_text="Évolution des nuances politiques (2024 → 2022 → 2017 → 2012)", font_size=12)
+
+fig.update_layout(title_text="Quelle était la nuance précédente de chaque circonscription ? (2024 → 2022 → 2017 → 2012)", font_size=12)
+# Années et positions horizontales relatives (xref='paper')
+years = ["2024", "2022", "2017", "2012"]
+x_positions = [-0.01, 0.32, 0.66, 1.00]   # à ajuster en fonction de vos marges
+
+# Crée les annotations
+annotations = []
+for x, year in zip(x_positions, years):
+    annotations.append(dict(
+        x=x, y=1.05,                    # un petit peu au-dessus de la zone de dessin
+        xref='paper', yref='paper',
+        text=year,
+        showarrow=False,
+        font=dict(size=14, color="#444")
+    ))
+
+# Applique layout
+fig.update_layout(
+    margin=dict(t=80, l=50, r=50, b=50),
+    annotations=annotations
+)
+
+fig.write_html("sankey_diagram_previous_shade_sans_centre.html")

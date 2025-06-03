@@ -92,8 +92,6 @@ for code_circumscription in codes_circumscription:
                                        'code_de_la_circonscription'] == code_circumscription))
 
                 # Instability
-                if actual_winner != winner_n_1:
-                    instability += 4
                 if winner_n_1 != winner_n_2:
                     instability += 3
                 if winner_n_2 != winner_n_3:
@@ -101,25 +99,21 @@ for code_circumscription in codes_circumscription:
                 if winner_n_3 != winner_n_4:
                     instability += 1
 
-                # Weight nuance in the circumscription
-                if actual_winner == winner_n_1:
-                    weight_nuance += 4
-                if actual_winner == winner_n_2:
+                # Weight nuance n-1 in the circumscription
+                if winner_n_1 == winner_n_2:
                     weight_nuance += 3
-                if actual_winner == winner_n_3:
+                if winner_n_1 == winner_n_3:
                     weight_nuance += 2
-                if actual_winner == winner_n_4:
+                if winner_n_1 == winner_n_4:
                     weight_nuance += 1
 
                 # Rise of change desir
-                if actual_winner == winner_n_1:
+                if winner_n_1 == winner_n_2:
                     rise_change += 1
-                    if actual_winner == winner_n_2:
+                    if winner_n_1 == winner_n_3:
                         rise_change += 1
-                        if actual_winner == winner_n_3:
+                        if winner_n_1 == winner_n_4:
                             rise_change += 1
-                            if actual_winner == winner_n_4:
-                                rise_change += 1
 
                 print(f'{code_circumscription} - {year}')
                 print(f'Instability - {instability}')

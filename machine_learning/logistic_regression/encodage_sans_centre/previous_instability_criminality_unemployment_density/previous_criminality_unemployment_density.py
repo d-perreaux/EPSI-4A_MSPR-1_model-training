@@ -32,7 +32,7 @@ X = df[['precedent', 'taux_pour_mille', 'taux_chomage', 'density', 'instabilite_
 y = df.prediction
 labels = [1, 2, 3, 4]
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.8, random_state=808)
+X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.5, random_state=808)
 
 scaler = StandardScaler()
 

@@ -54,7 +54,7 @@ results_job = DatabaseQuery.execute(results_select, fetch_all=True)
 
 # Check if all lines are ok
 for code_circumscription in codes_circumscription:
-    compteur_annee = 0
+    year_counter = 0
     for i, year in enumerate(years):
         if i == len(years) - 1:
             break
@@ -62,10 +62,11 @@ for code_circumscription in codes_circumscription:
             for result in results_job:
                 if (result['annee'] == year) and (result['code_de_la_circonscription'] == code_circumscription):
                     actual_winner = result['encodage_avec_centre_gagnant']
-                    winner_n_1 = next((r['encodage_avec_centre_gagnant'] for r in results_job if r['annee'] == (years[i+1]) and r['code_de_la_circonscription'] == code_circumscription))
-                    # print(f'{code_circumscription} - {year} : gagnant actuel {actual_winner} - gagnant précédent {winner_n_1} ')
-                    compteur_annee += 1
-    if compteur_annee != 6:
+                    winner_n_1 = next((r['encodage_avec_centre_gagnant'] for r in results_job
+                                       if r['annee'] == (years[i+1]) and r['code_de_la_circonscription']
+                                       == code_circumscription))
+                    year_counter += 1
+    if year_counter != 6:
         print(code_circumscription)
 
 # Start the instability algorithm
@@ -92,8 +93,6 @@ for code_circumscription in codes_circumscription:
                                        'code_de_la_circonscription'] == code_circumscription))
 
                 # Instability
-                if actual_winner != winner_n_1:
-                    instability += 4
                 if winner_n_1 != winner_n_2:
                     instability += 3
                 if winner_n_2 != winner_n_3:
@@ -101,25 +100,21 @@ for code_circumscription in codes_circumscription:
                 if winner_n_3 != winner_n_4:
                     instability += 1
 
-                # Weight nuance in the circumscription
-                if actual_winner == winner_n_1:
-                    weight_nuance += 4
-                if actual_winner == winner_n_2:
+                # Weight nuance n-1 in the circumscription
+                if winner_n_1 == winner_n_2:
                     weight_nuance += 3
-                if actual_winner == winner_n_3:
+                if winner_n_1 == winner_n_3:
                     weight_nuance += 2
-                if actual_winner == winner_n_4:
+                if winner_n_1 == winner_n_4:
                     weight_nuance += 1
 
                 # Rise of change desir
-                if actual_winner == winner_n_1:
+                if winner_n_1 == winner_n_2:
                     rise_change += 1
-                    if actual_winner == winner_n_2:
+                    if winner_n_1 == winner_n_3:
                         rise_change += 1
-                        if actual_winner == winner_n_3:
+                        if winner_n_1 == winner_n_4:
                             rise_change += 1
-                            if actual_winner == winner_n_4:
-                                rise_change += 1
 
                 print(f'{code_circumscription} - {year}')
                 print(f'Instability - {instability}')

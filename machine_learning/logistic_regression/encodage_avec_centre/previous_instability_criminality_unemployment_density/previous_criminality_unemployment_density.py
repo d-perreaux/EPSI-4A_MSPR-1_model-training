@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+import joblib
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
@@ -48,7 +49,9 @@ plt.figure()
 sns.pairplot(df, kind='reg')
 plt.savefig('previous_result_criminality_unemployment_pairplot.png')
 
-clf = LogisticRegression()
+# TODO
+# REGARDER CE QUE FAIT CLASS_WIEGHT
+clf = LogisticRegression(class_weight='balanced')
 clf.fit(X_train_scaled, y_train)
 
 y_pred = clf.predict(X_test_scaled)
@@ -120,4 +123,6 @@ plt.legend(loc='lower right')
 
 # Sauvegarder l'image avec une haute résolution
 plt.savefig("roc_curve_multiclass_smooth.png", dpi=300)
+
+joblib.dump(clf, 'model_with_center_previous_instability_criminality_unemployment_density')
 

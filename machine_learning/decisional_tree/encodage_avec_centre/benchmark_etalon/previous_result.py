@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import roc_auc_score, confusion_matrix, classification_report, accuracy_score
+from sklearn.metrics import roc_auc_score, confusion_matrix, classification_report, accuracy_score, precision_score, recall_score, f1_score
 
 from db_query.query import DatabaseQuery
 
@@ -23,6 +23,7 @@ query = """
     SELECT encodage_avec_centre_gagnant as prediction, encodage_avec_centre_gagnant_precedent as precedent FROM legislative_per_cir
     WHERE encodage_avec_centre_gagnant_precedent IS NOT NULL
     AND encodage_avec_centre_gagnant IS NOT NULL
+    AND annee IN (2017, 2022, 2024)
 """
 query_job = DatabaseQuery.execute(query, fetch_all=True)
 
@@ -45,6 +46,16 @@ clf = DecisionTreeClassifier(
 clf.fit(X_train, y_train)
 
 y_pred = clf.predict(X_test)
+y_proba = clf.predict_proba(X_test)
 print(accuracy_score(y_test, y_pred))
 
 print(confusion_matrix(y_test, y_pred))
+
+print("\nRapport de classification :")
+print(classification_report(y_test, y_pred, zero_division=1))
+
+try:
+    auc_score = roc_auc_score(y_test, y_proba, multi_class='ovr')
+    print("ROC AUC (ovr) :", auc_score)
+except ValueError as e:
+    print("Erreur ROC AUC :", e)

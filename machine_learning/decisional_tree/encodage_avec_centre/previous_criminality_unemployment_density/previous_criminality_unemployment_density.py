@@ -124,3 +124,38 @@ plt.legend(loc='lower right')
 # Sauvegarder l'image avec une haute résolution
 plt.savefig("roc_curve_multiclass_smooth.png", dpi=300)
 
+scores = []
+for depth in np.arange(2, 30, 2):
+    clf = DecisionTreeClassifier(
+        max_depth = depth,
+        random_state = 808
+    )
+
+    clf.fit(X_train, y_train)
+
+    train_auc = roc_auc_score(y_train, clf.predict_proba(X_train), multi_class='ovr')
+    test_auc = roc_auc_score(y_test, clf.predict_proba(X_test), multi_class='ovr')
+    scores.append({
+        'max_depth': depth,
+        'train': train_auc,
+        'test': test_auc,
+    })
+
+scores = pd.DataFrame(scores)
+print(scores)
+
+fig = plt.figure(figsize=(8,5))
+ax = fig.add_subplot(1, 1, 1)
+plt.plot(scores.max_depth, scores.train, label = 'train')
+plt.plot(scores.max_depth, scores.test, label = 'test')
+plt.plot(scores.max_depth, scores.train, '*', color = 'gray')
+plt.plot(scores.max_depth, scores.test, 'o', color = 'gray')
+ax.grid(True, which = 'both')
+ax.set_title('Train and test AUC vs max_depth')
+ax.set_xlabel('Max depth')
+ax.set_ylabel('AUC')
+plt.legend()
+
+plt.tight_layout()
+plt.savefig('train_and_test_auc_vs_max_depth.png')
+

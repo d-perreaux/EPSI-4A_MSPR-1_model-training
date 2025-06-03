@@ -2,5 +2,6 @@ venv
 .idea
 .env
 __pycache__/
+*.py[cod]
 mspr-454808-d750cb51f2b1.json
 ETL/data
