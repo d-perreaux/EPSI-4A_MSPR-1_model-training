@@ -13,8 +13,8 @@ from db_query.query import DatabaseQuery
 
 query = """
     SELECT 
-    encodage_avec_centre_gagnant as prediction, encodage_avec_centre_gagnant_precedent as precedent, criminality_per_cir.code_circonscription as code_circonscirption,
-    taux_pour_mille, taux_chomage, density, instabilite_avec_centre, poids_nuance_avec_centre, desir_changement_avec_centre, is_2024, 
+    encodage_avec_centre_gagnant as prediction, encodage_avec_centre_gagnant_precedent as gagnant_precedent, criminality_per_cir.code_circonscription as code_circonscirption,
+    taux_pour_mille as taux_criminalite_pm, taux_chomage, density as densite, instabilite_avec_centre, poids_nuance_avec_centre, desir_changement_avec_centre, is_2024, 
     ratio_menages_proprietaires, ratio_menages_en_maisons, ratio_menages_en_logements_sociaux, ratio_menages_pauvres, ratio_individus_18_24, ratio_individus_65_79  
     FROM legislative_per_cir
     INNER JOIN criminality_per_cir ON legislative_per_cir.annee = criminality_per_cir.annee AND legislative_per_cir.code_de_la_circonscription = criminality_per_cir.code_circonscription
@@ -30,7 +30,7 @@ df = pd.DataFrame(query_job)
 
 print(df.describe())
 
-X = df[['precedent', 'taux_pour_mille', 'taux_chomage', 'density',
+X = df[['gagnant_precedent', 'taux_criminalite_pm', 'taux_chomage', 'densite',
         'instabilite_avec_centre', 'poids_nuance_avec_centre', 'desir_changement_avec_centre','ratio_menages_proprietaires',
         'ratio_menages_en_maisons', 'ratio_menages_en_logements_sociaux', 'is_2024', 'ratio_menages_pauvres', 'ratio_individus_18_24', 'ratio_individus_65_79']]
 y = df.prediction

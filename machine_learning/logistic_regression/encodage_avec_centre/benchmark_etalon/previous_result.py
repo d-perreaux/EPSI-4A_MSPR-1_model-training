@@ -45,7 +45,17 @@ clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
 print(accuracy_score(y_test, y_pred))
 
-print(confusion_matrix(y_test, y_pred))
+cm = confusion_matrix(y_test, y_pred)
+
+print(cm)
+
+plt.figure(figsize=(8, 6))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=clf.classes_, yticklabels=clf.classes_)
+plt.xlabel('Predicted Labels')
+plt.ylabel('True Labels')
+plt.title('Matrice de confusion')
+plt.tight_layout()
+plt.savefig('confusion_matrix.png')
 
 print("Precision (pondérée) :", precision_score(y_test, y_pred, average='weighted', zero_division=1))
 print("Recall (pondéré) :", recall_score(y_test, y_pred, average='weighted', zero_division=1))
